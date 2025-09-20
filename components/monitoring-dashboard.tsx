@@ -1,6 +1,6 @@
 "use client"
 
-import { createClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -14,29 +14,62 @@ import { CommunityRankings } from "@/components/community-rankings"
 import Link from "next/link"
 import { LogoutButton } from "@/components/logout-button"
 import { DataAnalysisModule } from "@/components/data-analysis-module"
+import { useEffect, useState } from "react"
 
 interface MonitoringDashboardProps {
   onBackToSelector?: () => void
 }
 
-export async function MonitoringDashboard({ onBackToSelector }: MonitoringDashboardProps) {
-  const supabase = await createClient()
+export function MonitoringDashboard({ onBackToSelector }: MonitoringDashboardProps) {
+  const [recentEvents, setRecentEvents] = useState<any[]>([])
+  const [locations, setLocations] = useState<any[]>([])
+  const [activeAlertsCount, setActiveAlertsCount] = useState(0)
+  const [loading, setLoading] = useState(true)
 
-  // Fetch recent events
-  const { data: recentEvents } = await supabase
-    .from("waste_events")
-    .select("*")
-    .order("detected_at", { ascending: false })
-    .limit(10)
+  useEffect(() => {
+    async function fetchData() {
+      const supabase = createClient()
 
-  // Fetch monitoring locations
-  const { data: locations } = await supabase.from("monitoring_locations").select("*").order("name")
+      try {
+        // Fetch recent events
+        const { data: eventsData } = await supabase
+          .from("waste_events")
+          .select("*")
+          .order("detected_at", { ascending: false })
+          .limit(10)
 
-  // Fetch active alerts count
-  const { count: activeAlertsCount } = await supabase
-    .from("waste_events")
-    .select("*", { count: "exact", head: true })
-    .eq("status", "active")
+        // Fetch monitoring locations
+        const { data: locationsData } = await supabase.from("monitoring_locations").select("*").order("name")
+
+        // Fetch active alerts count
+        const { count: alertsCount } = await supabase
+          .from("waste_events")
+          .select("*", { count: "exact", head: true })
+          .eq("status", "active")
+
+        setRecentEvents(eventsData || [])
+        setLocations(locationsData || [])
+        setActiveAlertsCount(alertsCount || 0)
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+          <p className="mt-4 text-muted-foreground">加载中...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -132,16 +165,16 @@ export async function MonitoringDashboard({ onBackToSelector }: MonitoringDashbo
           {/* Left Column - Stats and Alerts */}
           <div className="lg:col-span-1 space-y-6">
             <StatsCards
-              activeAlerts={activeAlertsCount || 0}
-              totalLocations={locations?.length || 0}
-              recentEvents={recentEvents?.length || 0}
+              activeAlerts={activeAlertsCount}
+              totalLocations={locations.length}
+              recentEvents={recentEvents.length}
             />
-            <RealTimeAlerts events={recentEvents || []} />
+            <RealTimeAlerts events={recentEvents} />
           </div>
 
           {/* Middle Column - Interactive Map */}
           <div className="lg:col-span-1">
-            <InteractiveMap locations={locations || []} events={recentEvents || []} />
+            <InteractiveMap locations={locations} events={recentEvents} />
           </div>
 
           {/* Right Column - Events List */}
@@ -154,7 +187,7 @@ export async function MonitoringDashboard({ onBackToSelector }: MonitoringDashbo
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <EventsList events={recentEvents || []} />
+                <EventsList events={recentEvents} />
               </CardContent>
             </Card>
           </div>
