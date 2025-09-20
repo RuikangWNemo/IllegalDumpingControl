@@ -1,17 +1,25 @@
+"use client"
+
 import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Camera, Activity, Shield, Zap, BarChart3, Volume2, Settings, Monitor } from "lucide-react"
+import { Camera, Activity, Shield, Zap, BarChart3, Volume2, Settings, Monitor, ArrowLeft } from "lucide-react"
 import { StatsCards } from "@/components/stats-cards"
 import { EventsList } from "@/components/events-list"
 import { InteractiveMap } from "@/components/interactive-map"
 import { RealTimeAlerts } from "@/components/real-time-alerts"
 import { AIMetricsDashboard } from "@/components/ai-metrics-dashboard"
+import { CommunityRankings } from "@/components/community-rankings"
 import Link from "next/link"
 import { LogoutButton } from "@/components/logout-button"
+import { DataAnalysisModule } from "@/components/data-analysis-module"
 
-export async function MonitoringDashboard() {
+interface MonitoringDashboardProps {
+  onBackToSelector?: () => void
+}
+
+export async function MonitoringDashboard({ onBackToSelector }: MonitoringDashboardProps) {
   const supabase = await createClient()
 
   // Fetch recent events
@@ -37,12 +45,17 @@ export async function MonitoringDashboard() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
+              {onBackToSelector && (
+                <Button variant="ghost" size="sm" onClick={onBackToSelector}>
+                  <ArrowLeft className="w-4 h-4" />
+                </Button>
+              )}
               <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary/20 neon-glow">
                 <Shield className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold neon-text">AI智能垃圾监管系统</h1>
-                <p className="text-sm text-muted-foreground">实时监控 · 智能预警 · 数据分析</p>
+                <h1 className="text-2xl font-bold neon-text">政府监管端 - AI智能垃圾监管系统</h1>
+                <p className="text-sm text-muted-foreground">昆山市全域监控 · 智能预警 · 数据分析</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -57,9 +70,15 @@ export async function MonitoringDashboard() {
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link href="/analytics">
+                <Link href="/data-analysis">
                   <BarChart3 className="w-4 h-4 mr-2" />
                   数据分析
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/analytics">
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  统计报表
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
@@ -89,6 +108,24 @@ export async function MonitoringDashboard() {
       <div className="container mx-auto px-6 py-6">
         <div className="mb-6">
           <AIMetricsDashboard />
+        </div>
+
+        <div className="mb-6">
+          <CommunityRankings />
+        </div>
+
+        <div className="mb-6">
+          <Card className="glass">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-primary" />
+                数据分析概览
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DataAnalysisModule />
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

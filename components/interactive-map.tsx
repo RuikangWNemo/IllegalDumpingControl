@@ -40,6 +40,17 @@ interface HeatmapData {
   intensity: number
 }
 
+const kunshanCommunities = [
+  { id: "yushan", name: "玉山镇中心社区", district: "玉山镇", x: 45, y: 35, population: 8500 },
+  { id: "huaqiao", name: "花桥经济开发区", district: "花桥镇", x: 75, y: 25, population: 12000 },
+  { id: "bacheng", name: "巴城镇老街社区", district: "巴城镇", x: 25, y: 55, population: 6800 },
+  { id: "zhoushi", name: "周市镇工业园区", district: "周市镇", x: 55, y: 65, population: 15000 },
+  { id: "qiandeng", name: "千灯镇古镇社区", district: "千灯镇", x: 35, y: 75, population: 5200 },
+  { id: "lujia", name: "陆家镇商业区", district: "陆家镇", x: 65, y: 45, population: 9800 },
+  { id: "zhangpu", name: "张浦镇新城区", district: "张浦镇", x: 85, y: 55, population: 7600 },
+  { id: "dianshanhu", name: "淀山湖镇生态区", district: "淀山湖镇", x: 15, y: 25, population: 4200 },
+]
+
 export function InteractiveMap({ locations, events }: InteractiveMapProps) {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
   const [selectedEvent, setSelectedEvent] = useState<WasteEvent | null>(null)
@@ -98,7 +109,7 @@ export function InteractiveMap({ locations, events }: InteractiveMapProps) {
     <div className="space-y-6">
       <Tabs defaultValue="map" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="map">交互式地图</TabsTrigger>
+          <TabsTrigger value="map">昆山市监控地图</TabsTrigger>
           <TabsTrigger value="heatmap">违规热力图</TabsTrigger>
           <TabsTrigger value="analytics">时段分析</TabsTrigger>
         </TabsList>
@@ -108,47 +119,59 @@ export function InteractiveMap({ locations, events }: InteractiveMapProps) {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-primary" />
-                监控点位分布图
+                昆山市智能垃圾监管系统 - 全域监控
               </CardTitle>
+              <p className="text-sm text-muted-foreground">覆盖8个镇区，135个监控点位，实时AI识别</p>
             </CardHeader>
             <CardContent className="p-0">
               <div className="h-[600px] relative bg-gradient-to-br from-background to-muted/20 rounded-lg overflow-hidden">
-                {/* Simulated Map Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 opacity-50" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)]" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-green-900/20" />
+                <div className="absolute inset-0 bg-[url('/kunshan-satellite-aerial-view.jpg')] bg-cover bg-center opacity-30" />
 
-                {/* Map Grid */}
-                <div className="absolute inset-0 opacity-20">
-                  <div className="grid grid-cols-8 grid-rows-6 h-full">
-                    {Array.from({ length: 48 }).map((_, i) => (
-                      <div key={i} className="border border-primary/10" />
-                    ))}
-                  </div>
+                <div className="absolute inset-0 opacity-10">
+                  <svg className="w-full h-full" viewBox="0 0 100 100">
+                    <path
+                      d="M10,20 L90,20 L90,80 L10,80 Z"
+                      stroke="currentColor"
+                      strokeWidth="0.5"
+                      fill="none"
+                      strokeDasharray="2,2"
+                    />
+                    <path d="M30,20 L30,80" stroke="currentColor" strokeWidth="0.3" strokeDasharray="1,1" />
+                    <path d="M50,20 L50,80" stroke="currentColor" strokeWidth="0.3" strokeDasharray="1,1" />
+                    <path d="M70,20 L70,80" stroke="currentColor" strokeWidth="0.3" strokeDasharray="1,1" />
+                    <path d="M10,40 L90,40" stroke="currentColor" strokeWidth="0.3" strokeDasharray="1,1" />
+                    <path d="M10,60 L90,60" stroke="currentColor" strokeWidth="0.3" strokeDasharray="1,1" />
+                  </svg>
                 </div>
 
-                {/* Location Markers */}
                 <div className="relative h-full p-6">
-                  {locations.map((location, index) => {
-                    const status = getLocationStatus(location.id)
-                    const isActive = simulatedEvents[location.id] && Date.now() - simulatedEvents[location.id] < 3000
-                    const position = {
-                      top: `${20 + ((index * 15) % 60)}%`,
-                      left: `${15 + ((index * 20) % 70)}%`,
-                    }
+                  {kunshanCommunities.map((community) => {
+                    const communityEvents = events.filter((e) => e.location_name?.includes(community.name.slice(0, 2)))
+                    const hasViolations = communityEvents.some(
+                      (e) => e.event_type === "illegal_dumping" && e.status === "active",
+                    )
+                    const isActive = simulatedEvents[community.id] && Date.now() - simulatedEvents[community.id] < 3000
+
+                    const status = hasViolations
+                      ? { status: "alert", color: "bg-red-500", text: "违规", pulse: true }
+                      : communityEvents.length > 0
+                        ? { status: "active", color: "bg-yellow-500", text: "活跃", pulse: false }
+                        : { status: "normal", color: "bg-green-500", text: "正常", pulse: false }
 
                     return (
                       <div
-                        key={location.id}
-                        className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-                        style={position}
-                        onClick={() => setSelectedLocation(selectedLocation === location.id ? null : location.id)}
+                        key={community.id}
+                        className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group"
+                        style={{ left: `${community.x}%`, top: `${community.y}%` }}
+                        onClick={() => setSelectedLocation(selectedLocation === community.id ? null : community.id)}
                       >
                         {/* Pulse Animation for Active Events */}
                         {(isActive || status.pulse) && (
                           <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping scale-150" />
                         )}
 
-                        {/* Location Marker */}
+                        {/* Community Marker */}
                         <div
                           className={`relative p-3 rounded-full ${status.color} shadow-lg hover:scale-110 transition-transform`}
                         >
@@ -158,13 +181,18 @@ export function InteractiveMap({ locations, events }: InteractiveMapProps) {
                           )}
                         </div>
 
-                        {/* Location Info Popup */}
-                        {selectedLocation === location.id && (
+                        {/* Community Label */}
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 text-xs font-medium text-center whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 backdrop-blur-sm px-2 py-1 rounded">
+                          {community.name}
+                        </div>
+
+                        {/* Community Info Popup */}
+                        {selectedLocation === community.id && (
                           <Card className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-80 glass z-10">
                             <CardContent className="p-4">
                               <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                  <h4 className="font-medium text-sm">{location.name}</h4>
+                                  <h4 className="font-medium text-sm">{community.name}</h4>
                                   <Badge
                                     variant="outline"
                                     className={`text-xs ${status.color.replace("bg-", "text-")} border-current`}
@@ -172,20 +200,24 @@ export function InteractiveMap({ locations, events }: InteractiveMapProps) {
                                     {status.text}
                                   </Badge>
                                 </div>
-                                <p className="text-xs text-muted-foreground">{location.address}</p>
-                                <div className="flex items-center gap-2 text-xs">
-                                  <Camera className="w-3 h-3" />
-                                  <span
-                                    className={location.camera_status === "active" ? "text-green-400" : "text-red-400"}
-                                  >
-                                    摄像头{location.camera_status === "active" ? "在线" : "离线"}
-                                  </span>
+                                <div className="grid grid-cols-2 gap-2 text-xs">
+                                  <div className="flex items-center gap-1">
+                                    <MapPin className="w-3 h-3" />
+                                    <span>{community.district}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    <Camera className="w-3 h-3" />
+                                    <span>{Math.floor(community.population / 400)}个摄像头</span>
+                                  </div>
+                                </div>
+                                <div className="text-xs text-muted-foreground">
+                                  人口: {community.population.toLocaleString()}人
                                 </div>
 
-                                {/* Latest 3 Evidence Cards */}
+                                {/* Community Events */}
                                 <div className="space-y-2">
-                                  <h5 className="text-xs font-medium text-muted-foreground">最新事件证据</h5>
-                                  {getLocationEvents(location.id).map((event) => (
+                                  <h5 className="text-xs font-medium text-muted-foreground">最新事件</h5>
+                                  {communityEvents.slice(0, 3).map((event) => (
                                     <Card key={event.id} className="border-l-4 border-l-primary/50">
                                       <CardContent className="p-3">
                                         <div className="flex items-center justify-between mb-2">
@@ -224,6 +256,9 @@ export function InteractiveMap({ locations, events }: InteractiveMapProps) {
                                       </CardContent>
                                     </Card>
                                   ))}
+                                  {communityEvents.length === 0 && (
+                                    <p className="text-xs text-muted-foreground text-center py-2">暂无事件记录</p>
+                                  )}
                                 </div>
                               </div>
                             </CardContent>
@@ -234,20 +269,24 @@ export function InteractiveMap({ locations, events }: InteractiveMapProps) {
                   })}
                 </div>
 
-                {/* Map Legend */}
                 <div className="absolute bottom-4 left-4 glass p-3 rounded-lg">
                   <div className="space-y-2 text-xs">
+                    <div className="font-semibold mb-2">昆山市监控状态</div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-green-500 rounded-full" />
-                      <span>正常</span>
+                      <span>正常运行</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-yellow-500 rounded-full" />
-                      <span>活跃</span>
+                      <span>检测活跃</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                      <span>警报</span>
+                      <span>违规警报</span>
+                    </div>
+                    <div className="border-t border-border/50 pt-2 mt-2">
+                      <div className="text-muted-foreground">覆盖范围: 8镇区</div>
+                      <div className="text-muted-foreground">监控点位: 135个</div>
                     </div>
                   </div>
                 </div>
@@ -256,7 +295,7 @@ export function InteractiveMap({ locations, events }: InteractiveMapProps) {
                 <div className="absolute top-4 right-4 glass p-2 rounded-lg">
                   <div className="flex items-center gap-2 text-xs">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                    <span>实时监控</span>
+                    <span>昆山市实时监控</span>
                   </div>
                 </div>
               </div>
