@@ -7,20 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
 import { VideoFeedPanel } from "@/components/video-feed-panel"
-import {
-  Camera,
-  AlertTriangle,
-  CheckCircle,
-  Users,
-  TrendingUp,
-  Clock,
-  MapPin,
-  Send,
-  Award,
-  Star,
-  BarChart3,
-  Activity,
-} from "lucide-react"
+import { Camera, AlertTriangle, CheckCircle, Users, TrendingUp, Clock, MapPin, Send, Award, Star } from "lucide-react"
 
 interface ViolationEvent {
   id: string
@@ -167,10 +154,6 @@ export function CommunityPanel() {
                 <Users className="w-3 h-3 mr-1" />
                 物业管理
               </Badge>
-              <Badge variant="outline" className="text-green-500 border-green-500/50">
-                <Activity className="w-3 h-3 mr-1" />
-                系统正常
-              </Badge>
               <div className="text-right">
                 <div className="text-sm font-medium">社区积分</div>
                 <div className="text-lg font-bold text-blue-500">{stats.communityPoints}</div>
@@ -208,11 +191,10 @@ export function CommunityPanel() {
 
       <div className="container mx-auto px-6 py-6">
         <Tabs defaultValue="monitoring" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="monitoring">实时监控</TabsTrigger>
             <TabsTrigger value="events">事件处理</TabsTrigger>
             <TabsTrigger value="stats">合规统计</TabsTrigger>
-            <TabsTrigger value="analytics">数据分析</TabsTrigger>
             <TabsTrigger value="rewards">积分奖励</TabsTrigger>
           </TabsList>
 
@@ -420,72 +402,6 @@ export function CommunityPanel() {
                     <div>
                       <div className="text-2xl font-bold">{stats.communityPoints}</div>
                       <div className="text-sm text-muted-foreground">社区积分</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="analytics" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-blue-500" />
-                    违规趋势分析
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {["周一", "周二", "周三", "周四", "周五", "周六", "周日"].map((day, index) => {
-                      const violations = Math.floor(Math.random() * 10) + 1
-                      const maxViolations = 15
-                      const percentage = (violations / maxViolations) * 100
-
-                      return (
-                        <div key={day} className="space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span>{day}</span>
-                            <span>{violations}次</span>
-                          </div>
-                          <div className="w-full bg-muted/50 rounded-full h-2">
-                            <div
-                              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                              style={{ width: `${percentage}%` }}
-                            />
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-green-500" />
-                    处理效率统计
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
-                      <span className="text-sm">平均响应时间</span>
-                      <span className="font-bold text-green-500">3.2分钟</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
-                      <span className="text-sm">平均处理时间</span>
-                      <span className="font-bold text-blue-500">15.8分钟</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
-                      <span className="text-sm">一次性解决率</span>
-                      <span className="font-bold text-purple-500">94.2%</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-background/50 rounded-lg">
-                      <span className="text-sm">居民满意度</span>
-                      <span className="font-bold text-yellow-500">4.7/5.0</span>
                     </div>
                   </div>
                 </CardContent>

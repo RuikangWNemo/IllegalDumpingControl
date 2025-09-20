@@ -22,8 +22,6 @@ import {
   Building2,
   Clock,
   Award,
-  Activity,
-  Monitor,
 } from "lucide-react"
 import { RealTimeMap } from "@/components/real-time-map"
 
@@ -249,10 +247,6 @@ export function GovernmentPanel() {
                 <Building2 className="w-3 h-3 mr-1" />
                 政府监管
               </Badge>
-              <Badge variant="outline" className="text-green-500 border-green-500/50">
-                <Activity className="w-3 h-3 mr-1" />
-                全市系统正常
-              </Badge>
               <Select value={timeRange} onValueChange={setTimeRange}>
                 <SelectTrigger className="w-32">
                   <SelectValue />
@@ -275,11 +269,10 @@ export function GovernmentPanel() {
 
       <div className="container mx-auto px-6 py-6">
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">城市概览</TabsTrigger>
             <TabsTrigger value="communities">社区排名</TabsTrigger>
             <TabsTrigger value="trends">趋势分析</TabsTrigger>
-            <TabsTrigger value="monitoring">实时监控</TabsTrigger>
             <TabsTrigger value="suggestions">系统建议</TabsTrigger>
           </TabsList>
 
@@ -556,116 +549,6 @@ export function GovernmentPanel() {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
-
-          <TabsContent value="monitoring" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Monitor className="w-5 h-5 text-blue-500" />
-                    重点社区监控
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <VideoFeedPanel
-                    communityId="tinglin"
-                    cameraId="camera-01"
-                    showControls={false}
-                    autoDetection={true}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card className="glass">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-green-500" />
-                    系统运行状态
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 bg-background/50 rounded-lg">
-                      <div className="text-2xl font-bold text-green-500">24/24</div>
-                      <div className="text-sm text-muted-foreground">摄像头在线</div>
-                    </div>
-                    <div className="text-center p-4 bg-background/50 rounded-lg">
-                      <div className="text-2xl font-bold text-blue-500">99.8%</div>
-                      <div className="text-sm text-muted-foreground">系统可用性</div>
-                    </div>
-                    <div className="text-center p-4 bg-background/50 rounded-lg">
-                      <div className="text-2xl font-bold text-purple-500">156</div>
-                      <div className="text-sm text-muted-foreground">今日检测</div>
-                    </div>
-                    <div className="text-center p-4 bg-background/50 rounded-lg">
-                      <div className="text-2xl font-bold text-yellow-500">94.2%</div>
-                      <div className="text-sm text-muted-foreground">AI准确率</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className="glass">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-red-500" />
-                  全市实时警报
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[
-                    { community: "城北新区", type: "违规倾倒", time: "2分钟前", severity: "high" },
-                    { community: "玉山新城", type: "垃圾桶满溢", time: "5分钟前", severity: "medium" },
-                    { community: "听林园", type: "分类错误", time: "8分钟前", severity: "low" },
-                    { community: "花桥商务城", type: "非投放时间", time: "12分钟前", severity: "medium" },
-                  ].map((alert, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center justify-between p-3 rounded-lg border-l-4 ${
-                        alert.severity === "high"
-                          ? "border-l-red-500 bg-red-50/50"
-                          : alert.severity === "medium"
-                            ? "border-l-yellow-500 bg-yellow-50/50"
-                            : "border-l-blue-500 bg-blue-50/50"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <AlertTriangle
-                          className={`w-4 h-4 ${
-                            alert.severity === "high"
-                              ? "text-red-500"
-                              : alert.severity === "medium"
-                                ? "text-yellow-500"
-                                : "text-blue-500"
-                          }`}
-                        />
-                        <div>
-                          <div className="font-medium text-sm">{alert.community}</div>
-                          <div className="text-xs text-muted-foreground">{alert.type}</div>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xs text-muted-foreground">{alert.time}</div>
-                        <Badge
-                          className={
-                            alert.severity === "high"
-                              ? "text-red-600 bg-red-100"
-                              : alert.severity === "medium"
-                                ? "text-yellow-600 bg-yellow-100"
-                                : "text-blue-600 bg-blue-100"
-                          }
-                        >
-                          {alert.severity === "high" ? "紧急" : alert.severity === "medium" ? "中等" : "一般"}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
           </TabsContent>
 
           <TabsContent value="suggestions" className="space-y-6">
