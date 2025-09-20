@@ -2,12 +2,14 @@ import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Camera, MapPin, Activity, Shield, Zap, BarChart3, Volume2 } from "lucide-react"
+import { Camera, Activity, Shield, Zap, BarChart3, Volume2, Settings, Monitor } from "lucide-react"
 import { StatsCards } from "@/components/stats-cards"
 import { EventsList } from "@/components/events-list"
-import { LocationsMap } from "@/components/locations-map"
+import { InteractiveMap } from "@/components/interactive-map"
 import { RealTimeAlerts } from "@/components/real-time-alerts"
+import { AIMetricsDashboard } from "@/components/ai-metrics-dashboard"
 import Link from "next/link"
+import { LogoutButton } from "@/components/logout-button"
 
 export async function MonitoringDashboard() {
   const supabase = await createClient()
@@ -66,12 +68,29 @@ export async function MonitoringDashboard() {
                   警报系统
                 </Link>
               </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/devices">
+                  <Monitor className="w-4 h-4 mr-2" />
+                  设备监控
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/rules">
+                  <Settings className="w-4 h-4 mr-2" />
+                  规则配置
+                </Link>
+              </Button>
+              <LogoutButton />
             </div>
           </div>
         </div>
       </header>
 
       <div className="container mx-auto px-6 py-6">
+        <div className="mb-6">
+          <AIMetricsDashboard />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Stats and Alerts */}
           <div className="lg:col-span-1 space-y-6">
@@ -83,19 +102,9 @@ export async function MonitoringDashboard() {
             <RealTimeAlerts events={recentEvents || []} />
           </div>
 
-          {/* Middle Column - Map */}
+          {/* Middle Column - Interactive Map */}
           <div className="lg:col-span-1">
-            <Card className="glass h-[600px]">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MapPin className="w-5 h-5 text-primary" />
-                  监控点位分布
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <LocationsMap locations={locations || []} events={recentEvents || []} />
-              </CardContent>
-            </Card>
+            <InteractiveMap locations={locations || []} events={recentEvents || []} />
           </div>
 
           {/* Right Column - Events List */}

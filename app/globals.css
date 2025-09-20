@@ -118,6 +118,140 @@
   transition: all 0.2s ease-in-out;
 }
 
+/* Accessibility Features */
+
+/* Font Size Adjustments */
+.font-large {
+  font-size: 1.125rem; /* 18px */
+}
+
+.font-large h1 {
+  font-size: 2.5rem;
+}
+.font-large h2 {
+  font-size: 2rem;
+}
+.font-large h3 {
+  font-size: 1.75rem;
+}
+.font-large .text-sm {
+  font-size: 1rem;
+}
+.font-large .text-xs {
+  font-size: 0.875rem;
+}
+
+.font-extra-large {
+  font-size: 1.25rem; /* 20px */
+}
+
+.font-extra-large h1 {
+  font-size: 3rem;
+}
+.font-extra-large h2 {
+  font-size: 2.25rem;
+}
+.font-extra-large h3 {
+  font-size: 2rem;
+}
+.font-extra-large .text-sm {
+  font-size: 1.125rem;
+}
+.font-extra-large .text-xs {
+  font-size: 1rem;
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.1 0 0);
+  --card-foreground: oklch(1 0 0);
+  --primary: oklch(0.8 0.2 240);
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.2 0 0);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.15 0 0);
+  --muted-foreground: oklch(0.8 0 0);
+  --border: oklch(0.3 0 0);
+}
+
+.high-contrast .glass {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Color Blind Safe Palette */
+.color-blind-safe {
+  --chart-1: oklch(0.6 0.15 25); /* Orange */
+  --chart-2: oklch(0.5 0.2 240); /* Blue */
+  --chart-3: oklch(0.4 0.15 120); /* Green */
+  --chart-4: oklch(0.7 0.1 60); /* Yellow */
+  --chart-5: oklch(0.3 0.1 300); /* Purple */
+}
+
+.color-blind-safe .text-red-400 {
+  color: oklch(0.6 0.15 25);
+}
+.color-blind-safe .text-green-400 {
+  color: oklch(0.4 0.15 120);
+}
+.color-blind-safe .text-yellow-400 {
+  color: oklch(0.7 0.1 60);
+}
+.color-blind-safe .bg-red-500 {
+  background-color: oklch(0.6 0.15 25);
+}
+.color-blind-safe .bg-green-500 {
+  background-color: oklch(0.4 0.15 120);
+}
+.color-blind-safe .bg-yellow-500 {
+  background-color: oklch(0.7 0.1 60);
+}
+
+/* Reduce Motion */
+.reduce-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+.reduce-motion .animate-pulse,
+.reduce-motion .animate-ping,
+.reduce-motion .pulse-alert {
+  animation: none !important;
+}
+
+/* Elderly Mode */
+.elderly-mode {
+  --radius: 0.75rem; /* Larger border radius */
+}
+
+.elderly-mode button {
+  min-height: 3rem; /* Larger buttons */
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.elderly-mode .text-xs {
+  font-size: 1rem;
+}
+
+.elderly-mode .text-sm {
+  font-size: 1.125rem;
+}
+
+.elderly-mode input,
+.elderly-mode select {
+  min-height: 3rem;
+  font-size: 1.125rem;
+}
+
+.elderly-mode .glass {
+  border-width: 2px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

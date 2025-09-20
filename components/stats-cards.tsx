@@ -1,5 +1,6 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { AlertTriangle, MapPin, Activity, TrendingUp } from "lucide-react"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { AlertTriangle, MapPin, Activity, TrendingUp, Clock } from "lucide-react"
 
 interface StatsCardsProps {
   activeAlerts: number
@@ -17,6 +18,8 @@ export function StatsCards({ activeAlerts, totalLocations, recentEvents }: Stats
       bgColor: "bg-red-400/10",
       change: "+12%",
       trend: "up",
+      dataSource: "实时",
+      lastUpdated: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
     },
     {
       title: "监控点位",
@@ -26,6 +29,8 @@ export function StatsCards({ activeAlerts, totalLocations, recentEvents }: Stats
       bgColor: "bg-primary/10",
       change: "100%",
       trend: "stable",
+      dataSource: "实时",
+      lastUpdated: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
     },
     {
       title: "今日事件",
@@ -35,6 +40,8 @@ export function StatsCards({ activeAlerts, totalLocations, recentEvents }: Stats
       bgColor: "bg-blue-400/10",
       change: "+8%",
       trend: "up",
+      dataSource: "模拟",
+      lastUpdated: new Date().toLocaleTimeString("zh-CN", { hour12: false }),
     },
   ]
 
@@ -42,7 +49,18 @@ export function StatsCards({ activeAlerts, totalLocations, recentEvents }: Stats
     <div className="space-y-4">
       {stats.map((stat, index) => (
         <Card key={index} className="glass">
-          <CardContent className="p-6">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <Badge variant={stat.dataSource === "实时" ? "default" : "secondary"} className="text-xs">
+                {stat.dataSource}
+              </Badge>
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="w-3 h-3" />
+                <span>{stat.lastUpdated}</span>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 pb-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
