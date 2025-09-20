@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Camera, Activity, Shield, Zap, BarChart3, Volume2, Settings, Monitor } from "lucide-react"
 import { StatsCards } from "@/components/stats-cards"
 import { EventsList } from "@/components/events-list"
-import { RealTimeMap } from "@/components/real-time-map"
+import { InteractiveMap } from "@/components/interactive-map"
 import { RealTimeAlerts } from "@/components/real-time-alerts"
 import { AIMetricsDashboard } from "@/components/ai-metrics-dashboard"
 import Link from "next/link"
@@ -102,9 +102,9 @@ export async function MonitoringDashboard() {
             <RealTimeAlerts events={recentEvents || []} />
           </div>
 
-          {/* Middle Column - Real-time Map */}
+          {/* Middle Column - Interactive Map */}
           <div className="lg:col-span-1">
-            <RealTimeMap locations={locations || []} events={recentEvents || []} />
+            <InteractiveMap locations={locations || []} events={recentEvents || []} />
           </div>
 
           {/* Right Column - Events List */}
