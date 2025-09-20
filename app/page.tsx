@@ -1,21 +1,38 @@
 "use client"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useState, Suspense } from "react"
+import { MonitoringDashboard } from "@/components/monitoring-dashboard"
+import { CommunityPanel } from "@/components/community-panel"
+import { GovernmentPanel } from "@/components/government-panel"
+import { DashboardSkeleton } from "@/components/dashboard-skeleton"
+import { AuthGuard } from "@/components/auth-guard"
+import { ClientSelector, type ClientType } from "@/components/client-selector"
 
 export default function HomePage() {
-  const router = useRouter()
+  const [clientType, setClientType] = useState<ClientType | null>(null)
 
-  useEffect(() => {
-    router.push("/dashboard")
-  }, [router])
+  const handleClientSelect = (type: ClientType) => {
+    setClientType(type)
+  }
+
+  const renderDashboard = () => {
+    switch (clientType) {
+      case "community":
+        return <CommunityPanel />
+      case "government":
+        return <GovernmentPanel />
+      default:
+        return <MonitoringDashboard />
+    }
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">正在加载...</p>
+    <AuthGuard>
+      <div className="min-h-screen bg-background">
+        {!clientType && <ClientSelector onClientSelect={handleClientSelect} />}
+        {clientType && <ClientSelector onClientSelect={handleClientSelect} currentClient={clientType} />}
+        <Suspense fallback={<DashboardSkeleton />}>{renderDashboard()}</Suspense>
       </div>
-    </div>
+    </AuthGuard>
   )
 }

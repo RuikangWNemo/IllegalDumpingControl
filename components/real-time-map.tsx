@@ -30,7 +30,8 @@ interface WasteEvent {
 }
 
 interface RealTimeMapProps {
-  userRole: "government" | "community"
+  locations: Location[]
+  events: WasteEvent[]
 }
 
 const DKU_CAMPUS_BOUNDARY = [
@@ -50,7 +51,7 @@ const REAL_COMMUNITIES = [
   { name: "城北新区", center: { lat: 31.245, lng: 120.965 }, bins: 18 },
 ]
 
-export function RealTimeMap({ userRole }: RealTimeMapProps) {
+export function RealTimeMap({ locations, events }: RealTimeMapProps) {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
   const [mapView, setMapView] = useState<"satellite" | "street" | "heatmap">("street")
   const [realTimeData, setRealTimeData] = useState<Record<string, any>>({})
@@ -94,11 +95,6 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
     return positions
   }
 
-  const visibleCommunities =
-    userRole === "government"
-      ? REAL_COMMUNITIES
-      : REAL_COMMUNITIES.filter((c) => c.name === "听林园" || c.name === "万科城") // Community users see limited view
-
   return (
     <div className="space-y-6">
       <Tabs value={mapView} onValueChange={(value) => setMapView(value as any)} className="w-full">
@@ -114,19 +110,13 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
               <CardTitle className="flex items-center gap-2">
                 <Navigation className="w-5 h-5 text-primary" />
                 昆山智能垃圾监管地图 - 街道视图
-                <Badge variant={userRole === "government" ? "default" : "secondary"}>
-                  {userRole === "government" ? "全市监管视图" : "社区管理视图"}
-                </Badge>
               </CardTitle>
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                   实时更新中
                 </div>
-                <Badge variant="outline">
-                  覆盖{visibleCommunities.length}个社区 · {visibleCommunities.reduce((acc, c) => acc + c.bins, 0)}
-                  个智能垃圾桶
-                </Badge>
+                <Badge variant="outline">覆盖6个社区 · 79个智能垃圾桶</Badge>
               </div>
             </CardHeader>
             <CardContent className="p-0">
@@ -153,7 +143,7 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
                   </div>
                 </div>
 
-                {visibleCommunities.map((community, index) => {
+                {REAL_COMMUNITIES.map((community, index) => {
                   const communityData = realTimeData[community.name] || {
                     violations: 0,
                     compliance: 90,
@@ -173,9 +163,6 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
                         <div className="flex flex-col items-center">
                           <div
                             className={`p-3 rounded-full ${getComplianceColor(communityData.compliance)} shadow-lg hover:scale-110 transition-transform cursor-pointer`}
-                            onClick={() =>
-                              setSelectedLocation(selectedLocation === community.name ? null : community.name)
-                            }
                           >
                             <MapPin className="w-6 h-6 text-white" />
                             {communityData.activeAlerts > 0 && (
@@ -288,7 +275,7 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
                         <div className="w-3 h-3 bg-green-500 rounded-full" />
                         <span>
                           正常 (
-                          {visibleCommunities.reduce((acc, c) => acc + c.bins, 0) -
+                          {REAL_COMMUNITIES.reduce((acc, c) => acc + c.bins, 0) -
                             Object.values(realTimeData).reduce(
                               (acc: number, data: any) => acc + (data.violations || 0),
                               0,
@@ -327,7 +314,8 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
               <div className="h-[700px] relative bg-gradient-to-br from-green-900 to-blue-900 rounded-lg overflow-hidden">
                 <div className="absolute inset-0 bg-[url('/kunshan-satellite-aerial-view.jpg')] bg-cover bg-center opacity-60" />
 
-                {visibleCommunities.map((community, index) => {
+                {/* Same community markers but with satellite styling */}
+                {REAL_COMMUNITIES.map((community, index) => {
                   const communityData = realTimeData[community.name] || {
                     violations: 0,
                     compliance: 90,
@@ -345,9 +333,6 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
                         <div className="flex flex-col items-center">
                           <div
                             className={`p-3 rounded-full ${getComplianceColor(communityData.compliance)} shadow-2xl border-2 border-white/50 hover:scale-110 transition-transform cursor-pointer`}
-                            onClick={() =>
-                              setSelectedLocation(selectedLocation === community.name ? null : community.name)
-                            }
                           >
                             <MapPin className="w-6 h-6 text-white" />
                             {communityData.activeAlerts > 0 && (
@@ -379,7 +364,7 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
             </CardHeader>
             <CardContent className="p-0">
               <div className="h-[700px] relative bg-gradient-to-br from-background to-muted/20 rounded-lg overflow-hidden">
-                {visibleCommunities.map((community, index) => {
+                {REAL_COMMUNITIES.map((community, index) => {
                   const communityData = realTimeData[community.name] || {
                     violations: 0,
                     compliance: 90,
@@ -395,12 +380,11 @@ export function RealTimeMap({ userRole }: RealTimeMapProps) {
                   return (
                     <div key={community.name} className="absolute" style={position}>
                       <div
-                        className="w-24 h-24 rounded-full flex items-center justify-center text-white font-bold text-sm border-2 border-white/30 shadow-lg cursor-pointer hover:scale-110 transition-transform"
+                        className="w-24 h-24 rounded-full flex items-center justify-center text-white font-bold text-sm border-2 border-white/30 shadow-lg"
                         style={{
                           backgroundColor: `rgba(239, 68, 68, ${0.2 + intensity * 0.8})`,
                           boxShadow: `0 0 ${20 + intensity * 40}px rgba(239, 68, 68, ${0.3 + intensity * 0.5})`,
                         }}
-                        onClick={() => setSelectedLocation(selectedLocation === community.name ? null : community.name)}
                       >
                         <div className="text-center">
                           <div className="text-lg">{communityData.compliance.toFixed(0)}%</div>
