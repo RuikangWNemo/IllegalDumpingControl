@@ -37,25 +37,25 @@ export async function AnalyticsDashboard() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/">
+              <Link href="/?panel=government">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  返回监控台
+                  Back to Dashboard
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold">数据分析</h1>
-                <p className="text-sm text-muted-foreground">深度分析和热力图可视化</p>
+                <h1 className="text-2xl font-bold">Analytics Reports</h1>
+                <p className="text-sm text-muted-foreground">Deep analysis and heat map visualization</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Button variant="outline" size="sm">
                 <Download className="w-4 h-4 mr-2" />
-                导出报告
+                Export Report
               </Button>
               <Badge variant="outline" className="text-primary border-primary/50">
                 <Calendar className="w-3 h-3 mr-1" />
-                最近30天
+                Last 30 Days
               </Badge>
             </div>
           </div>
@@ -70,7 +70,7 @@ export async function AnalyticsDashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">总事件数</p>
+                    <p className="text-sm font-medium text-muted-foreground">Total Events</p>
                     <p className="text-3xl font-bold">{processedData.totalEvents}</p>
                     <div className="flex items-center gap-1 text-xs mt-1">
                       <TrendingUp className="w-3 h-3 text-green-400" />
@@ -88,7 +88,7 @@ export async function AnalyticsDashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">非法倾倒</p>
+                    <p className="text-sm font-medium text-muted-foreground">Illegal Dumping</p>
                     <p className="text-3xl font-bold">{processedData.illegalDumpingEvents}</p>
                     <div className="flex items-center gap-1 text-xs mt-1">
                       <TrendingUp className="w-3 h-3 text-red-400" />
@@ -106,7 +106,7 @@ export async function AnalyticsDashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">解决率</p>
+                    <p className="text-sm font-medium text-muted-foreground">Resolution Rate</p>
                     <p className="text-3xl font-bold">
                       {processedData.totalEvents > 0
                         ? Math.round((processedData.resolvedEvents / processedData.totalEvents) * 100)
@@ -129,9 +129,9 @@ export async function AnalyticsDashboard() {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground">平均响应时间</p>
+                    <p className="text-sm font-medium text-muted-foreground">Avg Response Time</p>
                     <p className="text-3xl font-bold">
-                      2.3<span className="text-lg">分钟</span>
+                      2.3<span className="text-lg">min</span>
                     </p>
                     <div className="flex items-center gap-1 text-xs mt-1">
                       <TrendingUp className="w-3 h-3 text-green-400" />

@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { EventsTable } from "@/components/events-table"
-import { EventStats } from "@/components/event-stats"
 import { ArrowLeft, Search, Filter, Download } from "lucide-react"
 import Link from "next/link"
+import { EventStats } from "@/components/event-stats" // Declare the EventStats variable
 
 export async function EventManagement() {
   const supabase = await createClient()
@@ -37,24 +37,24 @@ export async function EventManagement() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/">
+              <Link href="/?panel=government">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  返回监控台
+                  Back to Dashboard
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold">事件管理</h1>
-                <p className="text-sm text-muted-foreground">查看和管理所有检测事件</p>
+                <h1 className="text-2xl font-bold">Event Management</h1>
+                <p className="text-sm text-muted-foreground">View and manage all detected events</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Button variant="outline" size="sm">
                 <Download className="w-4 h-4 mr-2" />
-                导出数据
+                Export Data
               </Button>
               <Badge variant="outline" className="text-primary border-primary/50">
-                {eventStats.total} 总事件
+                {eventStats.total} Total Events
               </Badge>
             </div>
           </div>
@@ -71,7 +71,7 @@ export async function EventManagement() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Filter className="w-5 h-5" />
-                筛选和搜索
+                Filters and Search
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -79,43 +79,43 @@ export async function EventManagement() {
                 <div className="flex-1">
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input placeholder="搜索事件、位置或描述..." className="pl-10" />
+                    <Input placeholder="Search events, locations or descriptions..." className="pl-10" />
                   </div>
                 </div>
                 <div className="flex gap-2">
                   <Select defaultValue="all">
                     <SelectTrigger className="w-32">
-                      <SelectValue placeholder="事件类型" />
+                      <SelectValue placeholder="Event Type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">所有类型</SelectItem>
-                      <SelectItem value="illegal_dumping">非法倾倒</SelectItem>
-                      <SelectItem value="normal_disposal">正常投放</SelectItem>
-                      <SelectItem value="bin_full">垃圾桶满</SelectItem>
-                      <SelectItem value="maintenance">设备维护</SelectItem>
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="illegal_dumping">Illegal Dumping</SelectItem>
+                      <SelectItem value="normal_disposal">Normal Disposal</SelectItem>
+                      <SelectItem value="bin_full">Bin Full</SelectItem>
+                      <SelectItem value="maintenance">Maintenance</SelectItem>
                     </SelectContent>
                   </Select>
                   <Select defaultValue="all">
                     <SelectTrigger className="w-32">
-                      <SelectValue placeholder="状态" />
+                      <SelectValue placeholder="Status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">所有状态</SelectItem>
-                      <SelectItem value="active">活跃</SelectItem>
-                      <SelectItem value="investigating">调查中</SelectItem>
-                      <SelectItem value="resolved">已解决</SelectItem>
-                      <SelectItem value="false_positive">误报</SelectItem>
+                      <SelectItem value="all">All Status</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="investigating">Investigating</SelectItem>
+                      <SelectItem value="resolved">Resolved</SelectItem>
+                      <SelectItem value="false_positive">False Positive</SelectItem>
                     </SelectContent>
                   </Select>
                   <Select defaultValue="7d">
                     <SelectTrigger className="w-32">
-                      <SelectValue placeholder="时间范围" />
+                      <SelectValue placeholder="Time Range" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1d">今天</SelectItem>
-                      <SelectItem value="7d">最近7天</SelectItem>
-                      <SelectItem value="30d">最近30天</SelectItem>
-                      <SelectItem value="90d">最近90天</SelectItem>
+                      <SelectItem value="1d">Today</SelectItem>
+                      <SelectItem value="7d">Last 7 Days</SelectItem>
+                      <SelectItem value="30d">Last 30 Days</SelectItem>
+                      <SelectItem value="90d">Last 90 Days</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

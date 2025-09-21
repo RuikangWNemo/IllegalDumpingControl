@@ -14,7 +14,7 @@ interface EventStatsProps {
 export function EventStats({ stats }: EventStatsProps) {
   const statCards = [
     {
-      title: "总事件数",
+      title: "Total Events",
       value: stats.total,
       icon: Search,
       color: "text-primary",
@@ -22,7 +22,7 @@ export function EventStats({ stats }: EventStatsProps) {
       change: "+5.2%",
     },
     {
-      title: "活跃警报",
+      title: "Active Alerts",
       value: stats.active,
       icon: AlertTriangle,
       color: "text-red-400",
@@ -30,7 +30,7 @@ export function EventStats({ stats }: EventStatsProps) {
       change: "-12%",
     },
     {
-      title: "已解决",
+      title: "Resolved",
       value: stats.resolved,
       icon: CheckCircle,
       color: "text-green-400",
@@ -38,7 +38,7 @@ export function EventStats({ stats }: EventStatsProps) {
       change: "+18%",
     },
     {
-      title: "调查中",
+      title: "Investigating",
       value: stats.investigating,
       icon: Clock,
       color: "text-yellow-400",
@@ -46,7 +46,7 @@ export function EventStats({ stats }: EventStatsProps) {
       change: "+3%",
     },
     {
-      title: "非法倾倒",
+      title: "Illegal Dumping",
       value: stats.illegalDumping,
       icon: AlertTriangle,
       color: "text-orange-400",

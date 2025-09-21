@@ -8,7 +8,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { AlertTriangle, CheckCircle, Clock, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
-import { zhCN } from "date-fns/locale"
 
 interface WasteEvent {
   id: string
@@ -43,20 +42,20 @@ export function EventsTable({ events: initialEvents }: EventsTableProps) {
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      active: { variant: "destructive" as const, text: "活跃" },
-      investigating: { variant: "secondary" as const, text: "调查中" },
-      resolved: { variant: "outline" as const, text: "已解决" },
-      false_positive: { variant: "outline" as const, text: "误报" },
+      active: { variant: "destructive" as const, text: "Active" },
+      investigating: { variant: "secondary" as const, text: "Investigating" },
+      resolved: { variant: "outline" as const, text: "Resolved" },
+      false_positive: { variant: "outline" as const, text: "False Positive" },
     }
     return variants[status as keyof typeof variants] || variants.active
   }
 
   const getEventTypeText = (eventType: string) => {
     const types = {
-      illegal_dumping: "非法倾倒",
-      normal_disposal: "正常投放",
-      bin_full: "垃圾桶满",
-      maintenance: "设备维护",
+      illegal_dumping: "Illegal Dumping",
+      normal_disposal: "Normal Disposal",
+      bin_full: "Bin Full",
+      maintenance: "Maintenance",
     }
     return types[eventType as keyof typeof types] || eventType
   }
@@ -71,7 +70,7 @@ export function EventsTable({ events: initialEvents }: EventsTableProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <AlertTriangle className="w-5 h-5" />
-          事件列表
+          Events List
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
@@ -80,11 +79,11 @@ export function EventsTable({ events: initialEvents }: EventsTableProps) {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-12"></TableHead>
-                <TableHead>事件类型</TableHead>
-                <TableHead>位置</TableHead>
-                <TableHead>置信度</TableHead>
-                <TableHead>检测时间</TableHead>
-                <TableHead>状态</TableHead>
+                <TableHead>Event Type</TableHead>
+                <TableHead>Location</TableHead>
+                <TableHead>Confidence</TableHead>
+                <TableHead>Detection Time</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead className="w-12"></TableHead>
               </TableRow>
             </TableHeader>
@@ -121,7 +120,6 @@ export function EventsTable({ events: initialEvents }: EventsTableProps) {
                     <TableCell className="text-muted-foreground">
                       {formatDistanceToNow(new Date(event.detected_at), {
                         addSuffix: true,
-                        locale: zhCN,
                       })}
                     </TableCell>
                     <TableCell>
@@ -137,25 +135,25 @@ export function EventsTable({ events: initialEvents }: EventsTableProps) {
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem>
                             <Eye className="w-4 h-4 mr-2" />
-                            查看详情
+                            View Details
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <Edit className="w-4 h-4 mr-2" />
-                            编辑事件
+                            Edit Event
                           </DropdownMenuItem>
                           {event.status === "active" && (
                             <>
                               <DropdownMenuItem onClick={() => updateEventStatus(event.id, "investigating")}>
                                 <Clock className="w-4 h-4 mr-2" />
-                                标记为调查中
+                                Mark as Investigating
                               </DropdownMenuItem>
                               <DropdownMenuItem onClick={() => updateEventStatus(event.id, "resolved")}>
                                 <CheckCircle className="w-4 h-4 mr-2" />
-                                标记为已解决
+                                Mark as Resolved
                               </DropdownMenuItem>
                               <DropdownMenuItem onClick={() => updateEventStatus(event.id, "false_positive")}>
                                 <Trash2 className="w-4 h-4 mr-2" />
-                                标记为误报
+                                Mark as False Positive
                               </DropdownMenuItem>
                             </>
                           )}

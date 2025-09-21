@@ -41,25 +41,25 @@ export async function AlertSystem() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/">
+              <Link href="/?panel=government">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
-                  返回监控台
+                  Back to Dashboard
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold">警报与语音系统</h1>
-                <p className="text-sm text-muted-foreground">实时警报控制和语音警告管理</p>
+                <h1 className="text-2xl font-bold">Alert & Voice System</h1>
+                <p className="text-sm text-muted-foreground">Real-time alert control and voice warning management</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <Badge variant="outline" className="text-primary border-primary/50">
                 <Bell className="w-3 h-3 mr-1" />
-                {alerts?.length || 0} 条警报
+                {alerts?.length || 0} Alerts
               </Badge>
               <Badge variant="destructive" className="animate-pulse">
                 <Zap className="w-3 h-3 mr-1" />
-                {activeEvents?.length || 0} 紧急事件
+                {activeEvents?.length || 0} Emergency Events
               </Badge>
             </div>
           </div>
