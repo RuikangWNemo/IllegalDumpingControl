@@ -1,8 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { type NextRequest, NextResponse } from "next/server"
 
-export const dynamic = "force-dynamic"
-
 // GET /api/hardware/locations - 获取监控点列表
 export async function GET(request: NextRequest) {
   try {

@@ -30,7 +30,7 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     colorBlindSafe: false,
     reduceMotion: false,
     voiceEnabled: true,
-    selectedLanguage: "zh-CN",
+    selectedLanguage: "en-US",
     autoVolumeAdjust: true,
     blinkingAlerts: true,
   })

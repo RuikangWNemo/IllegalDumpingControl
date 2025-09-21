@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
-  Users,
   ArrowLeft,
   Camera,
   AlertTriangle,
@@ -26,6 +25,7 @@ import { CommunityMap } from "@/components/community-map"
 import { ViolationHandler } from "@/components/violation-handler"
 import { CommunityStats } from "@/components/community-stats"
 import { ResidentFeedback } from "@/components/resident-feedback"
+import Image from "next/image"
 
 interface CommunityPanelProps {
   onBackToSelector?: () => void
@@ -47,8 +47,8 @@ export function CommunityPanel({ onBackToSelector }: CommunityPanelProps) {
                   <ArrowLeft className="w-4 h-4" />
                 </Button>
               )}
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-green-500/20 neon-glow">
-                <Users className="w-6 h-6 text-green-500" />
+              <div className="flex items-center justify-center">
+                <Image src="/images/dku-logo.png" alt="DKU Logo" width={60} height={60} className="drop-shadow-lg" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold neon-text">社区管理端 - {selectedCommunity}</h1>

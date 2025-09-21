@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Building2, Users, Shield, MapPin } from "lucide-react"
+import Image from "next/image"
 
 interface ClientSelectorProps {
   onClientSelect: (clientType: "government" | "community") => void
@@ -22,13 +23,19 @@ export function ClientSelector({ onClientSelect }: ClientSelectorProps) {
     <div className="min-h-screen bg-background flex items-center justify-center p-6">
       <div className="w-full max-w-4xl">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <div className="flex items-center justify-center w-16 h-16 rounded-xl bg-primary/20 neon-glow">
-              <Shield className="w-8 h-8 text-primary" />
+          <div className="flex items-center justify-center mb-6">
+            <div className="relative">
+              <Image
+                src="/images/dku-logo.png"
+                alt="DKU Garbages Logo"
+                width={200}
+                height={200}
+                className="drop-shadow-2xl"
+              />
             </div>
           </div>
-          <h1 className="text-4xl font-bold neon-text mb-2">AI智能垃圾监管系统</h1>
-          <p className="text-lg text-muted-foreground">请选择您的系统类型</p>
+          <h1 className="text-4xl font-bold neon-text mb-2">DKU Smart Waste Management System</h1>
+          <p className="text-lg text-muted-foreground">Please select your system type</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -45,7 +52,7 @@ export function ClientSelector({ onClientSelect }: ClientSelectorProps) {
                   <Building2 className="w-10 h-10 text-blue-500" />
                 </div>
               </div>
-              <CardTitle className="text-2xl">政府监管端</CardTitle>
+              <CardTitle className="text-2xl">Government Panel</CardTitle>
               <Badge variant="outline" className="w-fit mx-auto text-blue-500 border-blue-500/50">
                 Government Panel
               </Badge>
@@ -54,15 +61,15 @@ export function ClientSelector({ onClientSelect }: ClientSelectorProps) {
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-sm">
                   <MapPin className="w-4 h-4 text-blue-500" />
-                  <span>昆山市全域监管</span>
+                  <span>City-wide Monitoring</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Shield className="w-4 h-4 text-blue-500" />
-                  <span>宏观数据分析</span>
+                  <span>Macro Data Analysis</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Building2 className="w-4 h-4 text-blue-500" />
-                  <span>社区排名管理</span>
+                  <span>Community Ranking Management</span>
                 </div>
               </div>
               <Button
@@ -73,7 +80,7 @@ export function ClientSelector({ onClientSelect }: ClientSelectorProps) {
                   handleSelect("government")
                 }}
               >
-                进入政府监管系统
+                Enter Government System
               </Button>
             </CardContent>
           </Card>
@@ -91,7 +98,7 @@ export function ClientSelector({ onClientSelect }: ClientSelectorProps) {
                   <Users className="w-10 h-10 text-green-500" />
                 </div>
               </div>
-              <CardTitle className="text-2xl">社区管理端</CardTitle>
+              <CardTitle className="text-2xl">Community Panel</CardTitle>
               <Badge variant="outline" className="w-fit mx-auto text-green-500 border-green-500/50">
                 Community Panel
               </Badge>
@@ -100,15 +107,15 @@ export function ClientSelector({ onClientSelect }: ClientSelectorProps) {
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-sm">
                   <Users className="w-4 h-4 text-green-500" />
-                  <span>社区精细化管理</span>
+                  <span>Fine-grained Community Management</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Shield className="w-4 h-4 text-green-500" />
-                  <span>实时违规处理</span>
+                  <span>Real-time Violation Handling</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <MapPin className="w-4 h-4 text-green-500" />
-                  <span>本地区域监控</span>
+                  <span>Local Area Monitoring</span>
                 </div>
               </div>
               <Button
@@ -119,14 +126,16 @@ export function ClientSelector({ onClientSelect }: ClientSelectorProps) {
                   handleSelect("community")
                 }}
               >
-                进入社区管理系统
+                Enter Community System
               </Button>
             </CardContent>
           </Card>
         </div>
 
         <div className="text-center mt-8">
-          <p className="text-sm text-muted-foreground">昆山市智能垃圾分类监管系统 - 基于AI视觉识别技术</p>
+          <p className="text-sm text-muted-foreground">
+            DKU Smart Waste Classification Management System - Based on AI Vision Recognition Technology
+          </p>
         </div>
       </div>
     </div>

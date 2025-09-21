@@ -15,7 +15,7 @@ export function AccessibilityToolbar() {
   const handleToggle = () => {
     setIsOpen(!isOpen)
     if (!isOpen) {
-      speak("无障碍设置面板已打开")
+      speak("Accessibility settings panel opened")
     }
   }
 
@@ -25,16 +25,18 @@ export function AccessibilityToolbar() {
     // Provide voice feedback for important changes
     switch (key) {
       case "elderlyMode":
-        speak(value ? "已启用老年友好模式" : "已关闭老年友好模式")
+        speak(value ? "Senior-friendly mode enabled" : "Senior-friendly mode disabled")
         break
       case "fontSize":
-        speak(`字体大小已调整为${value === "large" ? "大" : value === "extra-large" ? "特大" : "正常"}`)
+        speak(
+          `Font size adjusted to ${value === "large" ? "large" : value === "extra-large" ? "extra large" : "normal"}`,
+        )
         break
       case "highContrast":
-        speak(value ? "已启用高对比度模式" : "已关闭高对比度模式")
+        speak(value ? "High contrast mode enabled" : "High contrast mode disabled")
         break
       case "voiceEnabled":
-        if (value) speak("语音播报已启用")
+        if (value) speak("Voice announcements enabled")
         break
     }
   }
@@ -47,7 +49,7 @@ export function AccessibilityToolbar() {
         size="sm"
         onClick={handleToggle}
         className="fixed bottom-4 right-4 z-50 rounded-full w-12 h-12 p-0 shadow-lg bg-transparent"
-        aria-label="打开无障碍设置"
+        aria-label="Open accessibility settings"
       >
         <Accessibility className="w-5 h-5" />
       </Button>
@@ -59,7 +61,7 @@ export function AccessibilityToolbar() {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Accessibility className="w-5 h-5 text-primary" />
-                <h3 className="font-medium">无障碍设置</h3>
+                <h3 className="font-medium">Accessibility Settings</h3>
               </div>
               <Button variant="ghost" size="sm" onClick={() => setIsOpen(false)} className="h-8 w-8 p-0">
                 <X className="w-4 h-4" />
@@ -67,11 +69,11 @@ export function AccessibilityToolbar() {
             </div>
 
             <div className="space-y-4">
-              {/* Elderly Mode */}
+              {/* Senior-Friendly Mode */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Eye className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">老年友好模式</span>
+                  <span className="text-sm">Senior-Friendly Mode</span>
                 </div>
                 <Switch
                   checked={settings.elderlyMode}
@@ -83,16 +85,16 @@ export function AccessibilityToolbar() {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Type className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">字体大小</span>
+                  <span className="text-sm">Font Size</span>
                 </div>
                 <Select value={settings.fontSize} onValueChange={(value) => handleSettingChange("fontSize", value)}>
                   <SelectTrigger className="bg-background/50">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="normal">正常</SelectItem>
-                    <SelectItem value="large">大</SelectItem>
-                    <SelectItem value="extra-large">特大</SelectItem>
+                    <SelectItem value="normal">Normal</SelectItem>
+                    <SelectItem value="large">Large</SelectItem>
+                    <SelectItem value="extra-large">Extra Large</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -101,7 +103,7 @@ export function AccessibilityToolbar() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Palette className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">高对比度</span>
+                  <span className="text-sm">High Contrast</span>
                 </div>
                 <Switch
                   checked={settings.highContrast}
@@ -109,11 +111,11 @@ export function AccessibilityToolbar() {
                 />
               </div>
 
-              {/* Color Blind Safe */}
+              {/* Color Blind Friendly */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Palette className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">色盲友好</span>
+                  <span className="text-sm">Color Blind Friendly</span>
                 </div>
                 <Switch
                   checked={settings.colorBlindSafe}
@@ -125,7 +127,7 @@ export function AccessibilityToolbar() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Settings className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">减少动画</span>
+                  <span className="text-sm">Reduce Motion</span>
                 </div>
                 <Switch
                   checked={settings.reduceMotion}
@@ -133,11 +135,11 @@ export function AccessibilityToolbar() {
                 />
               </div>
 
-              {/* Voice Enabled */}
+              {/* Voice Announcements */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Volume2 className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">语音播报</span>
+                  <span className="text-sm">Voice Announcements</span>
                 </div>
                 <Switch
                   checked={settings.voiceEnabled}
@@ -150,7 +152,7 @@ export function AccessibilityToolbar() {
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <Languages className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-sm">语音语言</span>
+                    <span className="text-sm">Voice Language</span>
                   </div>
                   <Select
                     value={settings.selectedLanguage}
@@ -160,8 +162,8 @@ export function AccessibilityToolbar() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="zh-CN">中文普通话</SelectItem>
-                      <SelectItem value="zh-dialect">中文方言</SelectItem>
+                      <SelectItem value="zh-CN">Chinese Mandarin</SelectItem>
+                      <SelectItem value="zh-dialect">Chinese Dialect</SelectItem>
                       <SelectItem value="en-US">English</SelectItem>
                     </SelectContent>
                   </Select>
@@ -172,7 +174,7 @@ export function AccessibilityToolbar() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Volume2 className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">自动音量调节</span>
+                  <span className="text-sm">Auto Volume Adjust</span>
                 </div>
                 <Switch
                   checked={settings.autoVolumeAdjust}
@@ -184,7 +186,7 @@ export function AccessibilityToolbar() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Eye className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">闪烁提醒</span>
+                  <span className="text-sm">Blinking Alerts</span>
                 </div>
                 <Switch
                   checked={settings.blinkingAlerts}
@@ -197,12 +199,12 @@ export function AccessibilityToolbar() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => speak("这是语音播报测试")}
+                onClick={() => speak("This is a voice announcement test")}
                 className="w-full"
                 disabled={!settings.voiceEnabled}
               >
                 <Volume2 className="w-4 h-4 mr-2" />
-                测试语音播报
+                Test Voice Announcement
               </Button>
             </div>
           </CardContent>
